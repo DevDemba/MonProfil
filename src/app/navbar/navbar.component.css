@@ -1,0 +1,11 @@
+ul{
+    display: flex;
+
+ 
+}
+
+li{
+    display: flex;
+    justify-content: space-around;
+    margin-right: 10px;
+}
