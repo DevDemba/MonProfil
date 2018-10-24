@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { wrapListenerWithPreventDefault } from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,15 @@ export class LoginComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  loginUser(event){
+    event.preventDefault()
+    const target = event.target
+    const username = target.querySelector('#username').value
+    const password = target.querySelector('#password').value
+    
+    console.log(username, password)
   }
 
 }

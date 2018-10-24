@@ -1,3 +1,5 @@
+
+
 ul{
     display: flex;
 
@@ -8,4 +10,17 @@ li{
     display: flex;
     justify-content: space-around;
     margin-right: 10px;
+  
+    
+}
+
+a{
+    color: white;
+  
+}
+
+nav{
+    font-size: large;
+    font-family: cursive
+    
 }
