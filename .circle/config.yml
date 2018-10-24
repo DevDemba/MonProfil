@@ -6,8 +6,8 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:10
+      # specify the version you desire8 here
+      - image: circleci/node:latest
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
