@@ -1,5 +1,7 @@
 # MonProfil
 
+[![CircleCI](https://circleci.com/gh/DevDemba/monProfil.svg?style=svg)](https://circleci.com/gh/DevDemba/monProfil)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.
 
 ## Development server
