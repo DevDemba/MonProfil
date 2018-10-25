@@ -1,19 +1,47 @@
 version: 2
-jobs:
-  build:
+
+defaults:
+  workspace_root: &workspace_root
+    ~/isogeo-profile
+
+  nodejs_container: &nodejs_container
+    working_directory: *workspace_root
     docker:
       - image: circleci/node:8-stretch
 
-    working_directory: ~/monProfil
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
 
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      name: Restore node_modules cache
+      keys:
+        - isogeo-profile-node-{{ checksum "yarn.lock" }}
+        - isogeo-profile-
+
+jobs:
+  checkout:
+    <<: *nodejs_container
     steps:
       - checkout
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - ./
+
+  install:
+    <<: *nodejs_container
+    steps:
+      - *attach_workspace
+      - *restore_node_modules
 
       - restore_cache:
           name: Restore yarn cache
           keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
-          - v1-dependencies-
+            - isogeo-profile-yarn-{{ checksum "yarn.lock" }}
+            - isogeo-profile-yarn-
 
       - run:
           name: Install dependencies
@@ -21,10 +49,48 @@ jobs:
 
       - save_cache:
           name: Save yarn cache
+          key: isogeo-profile-yarn-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
-        
+            - ~/.cache/yarn/
+
+      - save_cache:
+          name: Save node_modules cache
+          key: isogeo-profile-node-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
+
+  build:
+    <<: *nodejs_container
+    steps:
+      - *attach_workspace
+      - *restore_node_modules
+
+      - restore_cache:
+          name: Restore yarn cache
+          keys:
+            - isogeo-profile-yarn-{{ checksum "yarn.lock" }}
+            - isogeo-profile-yarn-
+
       - run:
-          name: Unit tests
-          command: yarn test
+          name: Package as tarball
+          command: yarn publish dist/isogeo_profil.tgz
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - dist/
+
+workflows:
+  version: 2
+
+  push:
+    jobs:
+      - checkout
+
+      - install:
+          requires:
+            - checkout
+
+      - build:
+          requires:
+            - install
