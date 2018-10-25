@@ -75,6 +75,10 @@ jobs:
           name: Angular build
           command: yarn ng -- build --prod --aot --no-progress
 
+      - store_artifacts:
+          path: ./dist
+          prefix: build
+
       - persist_to_workspace:
           root: *workspace_root
           paths:
