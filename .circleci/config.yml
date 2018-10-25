@@ -94,7 +94,7 @@ jobs:
 
       - run:
           name: Angular test
-          command: yarn test -- --single-run --no-progress
+          command: yarn test --no-progress --code-coverage
 
       - store_artifacts:
           path: test-results.xml
