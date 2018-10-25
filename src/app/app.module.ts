@@ -18,8 +18,6 @@ import { NavbarComponent } from './navbar/navbar.component';
     LoginComponent,
     AdminComponent,
     NavbarComponent,
-    
-  
   
   ],
   imports: [
@@ -27,10 +25,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     AppRoutingModule,
     HttpClientModule
 
-    
-
   ],
-  providers: [],
+  providers: [HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

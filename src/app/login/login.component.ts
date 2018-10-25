@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { wrapListenerWithPreventDefault } from '@angular/core/src/render3/instructions';
+import { AuthService } from '../auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -8,18 +9,23 @@ import { wrapListenerWithPreventDefault } from '@angular/core/src/render3/instru
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private Auth: AuthService) { }
 
   ngOnInit() {
   }
 
   loginUser(event){
+
     event.preventDefault()
     const target = event.target
-    const username = target.querySelector('#username').value
+    const userId = target.querySelector('#userId').value
     const password = target.querySelector('#password').value
     
-    console.log(username, password)
+    this.Auth.getUserDetails(userId, password)
+    console.log(userId, password)
+    
   }
+  
+
 
 }
