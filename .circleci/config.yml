@@ -7,7 +7,7 @@ defaults:
   nodejs_container: &nodejs_container
     working_directory: *workspace_root
     docker:
-      - image: circleci/node:8-stretch
+      - image: circleci/node:8-browsers
 
   attach_workspace: &attach_workspace
     attach_workspace:
@@ -57,7 +57,7 @@ jobs:
           name: Save node_modules cache
           key: isogeo-profile-node-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules/
+            - ./node_modules/
 
   build:
     <<: *nodejs_container
@@ -72,8 +72,41 @@ jobs:
             - isogeo-profile-yarn-
 
       - run:
-          name: Package as tarball
-          command: yarn publish dist/isogeo_profil.tgz
+          name: Angular build
+          command: yarn ng -- build --prod --aot --no-progress
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - dist/
+
+  test:
+    <<: *nodejs_container
+    steps:
+      - *attach_workspace
+      - *restore_node_modules
+
+      - restore_cache:
+          name: Restore yarn cache
+          keys:
+            - isogeo-profile-yarn-{{ checksum "yarn.lock" }}
+            - isogeo-profile-yarn-
+
+      - run:
+          name: Angular test
+          command: yarn test -- --single-run --no-progress
+
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+
+      - run:
+          name: angular-lint
+          command: yarn lint -- --formatters-dir ./tslint-formatters --format junit -o tslint.xml
+
+      - store_artifacts:
+          path: tslint.xml
+          prefix: lint
 
       - persist_to_workspace:
           root: *workspace_root
@@ -94,3 +127,8 @@ workflows:
       - build:
           requires:
             - install
+
+      - test:
+          requires:
+            - build
+

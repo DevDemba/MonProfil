@@ -1,6 +1,10 @@
 {
-  "name": "mon-profil",
-  "version": "0.0.0",
+  "name": "IsogeoProfile",
+  "version": "1.0.0-beta1",
+  "repository": {
+    "url": "https://github.com/DevDemba/monProfil",
+    "type": "git"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
