@@ -132,6 +132,6 @@ workflows:
           requires:
             - install
 
-      - test:
-          requires:
-            - build
+#      - test:
+#          requires:
+#            - build

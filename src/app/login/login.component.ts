@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
   constructor(private Auth: AuthService) { }
 
   ngOnInit() {
+
   }
 
   loginUser(event){
@@ -21,11 +22,12 @@ export class LoginComponent implements OnInit {
     const userId = target.querySelector('#userId').value
     const password = target.querySelector('#password').value
     
-    this.Auth.getUserDetails(userId, password)
-    console.log(userId, password)
+    this.Auth.getUserAuthentication()
+    console.log(event)
     
   }
   
+
 
 
 }

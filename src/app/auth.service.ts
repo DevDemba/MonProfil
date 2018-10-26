@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 interface myData{
   obj:  Array<Object>
@@ -12,15 +12,27 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  getUserDetails(username, password){
+  rootUrl = 'rootapi';
+  redirect_uris: ["http://localhost:5000/callback"];
 
-    return this.http.get<myData>('https://jsonplaceholder.typicode.com/posts'
-    ).subscribe(
+  getUserAuthentication(){
+ 
+    var reqHeader = new HttpHeaders({ 'Content-Type': 'application/Json'})
+
+    return this.http.post(this.rootUrl+'/token', { headers: reqHeader })
+  }
+
+  getUserDetails(){
+
+    return this.http.get<myData>(this.rootUrl,
+     { headers: new HttpHeaders({authorize:'https://id.api.isogeo.com/oauth/token'})
+      
+    }).subscribe(
       data =>{
         console.log(data, 'sommes nous connecter au serveur')
     })
-  }
 
+  }
 
 
 }
